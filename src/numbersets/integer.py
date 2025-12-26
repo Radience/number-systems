@@ -2,11 +2,12 @@ from . import Natural
 
 class Integer():
     def __init__(self, value: int | Natural):
-        if not isinstance(value, int):
-            raise TypeError("Целое число должно быть целым")
         if isinstance(value, Natural):
             self._value = value._value
-        self._value = value
+        elif isinstance(value, int):
+            self._value = value
+        else:
+            raise TypeError("Целое число должно быть int или Natural")
 
     def __add__(self, other: Integer | Natural) -> Integer:
         if not isinstance(other, (Integer, Natural)):
@@ -34,6 +35,9 @@ class Integer():
         if not isinstance(other, (Integer, Natural)):
             return NotImplemented
         return self._value == other._value
+    
+    def __ne__(self, other: Integer | Natural) -> bool:
+        return not self.__eq__(other)
     
     def __lt__(self, other: Integer | Natural) -> bool:
         if not isinstance(other, (Integer, Natural)):

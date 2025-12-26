@@ -26,6 +26,9 @@ class Natural:
             return NotImplemented
         return self._value == other._value
     
+    def __ne__(self, other: Natural) -> bool:
+        return not self.__eq__(other)
+    
     def __lt__(self, other: Natural) -> bool:
         if not isinstance(other, Natural):
             return NotImplemented
@@ -45,6 +48,9 @@ class Natural:
         if not isinstance(other, Natural):
             return NotImplemented
         return self._value >= other._value
+    
+    def __abs__(self):
+        return Natural(self._value)
     
     def __repr__(self):
         return f'Natural({self._value})'
