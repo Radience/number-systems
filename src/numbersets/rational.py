@@ -26,7 +26,7 @@ class Rational:
         g = self._gcd(abs(self._num._value), abs(self._den._value))
         self._num = Integer(self._num._value // g)
         self._den = Integer(self._den._value // g)
-        if self._den < 0:
+        if self._den._value < 0:
             self._num = Integer(-self._num._value)
             self._den = Integer(-self._den._value)
 
@@ -84,8 +84,6 @@ class Rational:
             else:
                 return Rational(Integer(num), Integer(den))
 
-    _number_types = (Natural, Integer, Rational)
-
     def _compare_values(self, other: NumberSet) -> tuple[int, int]:
         if isinstance(other, Rational):
             return other._num, other._den
@@ -129,3 +127,5 @@ class Rational:
         if self._den._value == 1:
             return str(self._num._value)
         return f'{self._num._value}/{self._den._value}'
+    
+_number_types = (Natural, Integer, Rational)

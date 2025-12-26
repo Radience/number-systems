@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 class Natural:
     def __init__(self, value: int):
         if not isinstance(value, int):
@@ -54,3 +56,6 @@ class Natural:
     
     def __repr__(self):
         return f'Natural({self._value})'
+    
+    def __str__(self):
+        return str(self._value)
