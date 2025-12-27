@@ -83,42 +83,44 @@ class Rational:
                 return Rational(Integer(den), Integer(num))
             else:
                 return Rational(Integer(num), Integer(den))
-
-    def _compare_values(self, other: NumberSet) -> tuple[int, int]:
-        if isinstance(other, Rational):
-            return other._num, other._den
-        else:
-            return other._value, 1
+            
+    def _compare_values(self, other: NumberSet, sym_comp: str) -> bool:
+        if not isinstance(other, (Natural, Integer, Rational)):
+            return NotImplemented
+        if isinstance(other, (Natural, Integer)):
+            other = Rational(other)
+        match(sym_comp):
+            case 'eq': #eq
+                return self._num * other._den == self._den * other._num
+            case 'ne': #ne
+                return self._num * other._den != self._den * other._num
+            case 'ge': #ge
+                return self._num * other._den >= self._den * other._num
+            case 'le': #le
+                return self._num * other._den <= self._den * other._num
+            case 'gt': #gt
+                return self._num * other._den > self._den * other._num
+            case 'lt': #lt
+                return self._num * other._den < self._den * other._num
+        return None
 
     def __eq__(self, other: NumberSet) -> bool:
-        if not isinstance(other, self._number_types):
-            return NotImplemented
-        num2, den2 = self._compare_values(other)
-        return self._num * den2 == self._den * num2
+        return self._compare_values(other, 'eq')
+    
+    def __ne__(self, other: NumberSet) -> bool:
+        return self._compare_values(other, 'ne')
 
     def __gt__(self, other: NumberSet) -> bool:
-        if not isinstance(other, self._number_types):
-            return NotImplemented
-        num2, den2 = self._compare_values(other)
-        return self._num * den2 > self._den * num2
+        return self._compare_values(other, 'gt')
     
     def __lt__(self, other: NumberSet) -> bool:
-        if not isinstance(other, self._number_types):
-            return NotImplemented
-        num2, den2 = self._compare_values(other)
-        return self._num * den2 < self._den * num2
+        return self._compare_values(other, 'lt')
     
     def __ge__(self, other: NumberSet) -> bool:
-        if not isinstance(other, self._number_types):
-            return NotImplemented
-        num2, den2 = self._compare_values(other)
-        return self._num * den2 >= self._den * num2
+        return self._compare_values(other, 'ge')
     
     def __le__(self, other: NumberSet) -> bool:
-        if not isinstance(other, self._number_types):
-            return NotImplemented
-        num2, den2 = self._compare_values(other)
-        return self._num * den2 <= self._den * num2
+        return self._compare_values(other, 'le')
         
     def __repr__(self):
         return f'Rational({repr(self._num)}, {repr(self._den)})'
@@ -127,5 +129,3 @@ class Rational:
         if self._den._value == 1:
             return str(self._num._value)
         return f'{self._num._value}/{self._den._value}'
-    
-_number_types = (Natural, Integer, Rational)
